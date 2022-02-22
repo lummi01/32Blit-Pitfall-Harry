@@ -9,71 +9,81 @@ using namespace blit;
 
 Font font(font5x7);
 
-int state = 2;
+int state;
 
-int level[256][4]{
-{0,3,99,14}, {0,1,3,18}, {4,5,9,18}, {4,6,99,99}, {0,1,2,19}, {4,5,9,11}, {4,10,99,13}, {4,5,7,14}, {4,8,99,17}, {4,5,10,17}, {4,6,99,99}, {0,3,99,17}, {0,3,99,18}, {0,2,99,19}, {0,2,12,99}, 
-{0,2,99,14}, {4,5,7,18}, {4,5,10,18}, {4,6,99,99}, {0,3,99,18}, {4,5,9,18}, {4,6,99,99}, {0,1,2,18}, {4,5,9,19}, {4,5,6,99}, {0,1,2,16}, {4,5,7,19}, {4,5,10,11}, {4,10,99,13}, {4,5,7,14},
-{4,8,99,18}, {4,5,10,18}, {4,6,99,99}, {0,1,3,17}, {4,5,9,17}, {4,6,99,99}, {0,2,99,18}, {0,3,99,18}, {0,2,99,16}, {0,1,2,18}, {4,5,9,16}, {4,10,99,13}, {4,5,9,12}, {4,10,99,13}, {4,5,7,19},
-{4,5,10,12}, {4,10,99,13}, {4,5,7,18}, {4,5,10,16}, {4,10,99,13}, {4,5,9,12}, {4,10,99,13}, {4,5,7,18}, {4,5,10,18}, {4,6,99,99}, {0,1,2,19}, {4,5,9,12}, {4,10,99,13}, {5,7,99,17}, {4,5,10,17},
-{4,6,99,99}, {0,3,99,19}, {0,3,11,99}, {0,1,2,11}, {4,5,7,11}, {4,8,12,99}, {4,8,99,16}, {8,99,99,19}, {4,5,10,12}, {4,10,99,13}, {4,5,7,19}, {4,5,10,11}, {4,10,99,13}, {4,5,7,12}, {4,8,99,16},
-{4,8,99,18}, {4,5,10,16}, {4,10,99,13}, {4,5,9,11}, {4,10,99,13}, {4,5,7,16}, {4,8,99,18}, {4,5,10,14}, {4,10,99,13}, {4,5,9,18}, {4,5,6,99}, {0,2,99,14}, {0,3,99,17}, {4,5,9,17}, {4,6,99,99},
-{0,2,99,19}, {0,3,12,99}, {0,1,2,16}, {4,5,7,19}, {4,5,10,12}, {4,10,99,13}, {4,5,7,17}, {4,5,10,18}, {4,5,6,99}, {0,3,11,99}, {0,1,3,11}, {4,5,7,12}, {4,8,99,14}, {4,8,99,18}, {4,5,10,19},
-{4,5,6,99}, {0,1,3,12}, {4,5,7,14}, {8,99,99,18}, {4,5,10,19}, {4,5,6,99}, {0,1,3,14}, {4,5,7,17}, {4,5,10,18}, {4,5,6,99}, {0,3,99,16}, {0,1,3,19}, {4,5,9,12}, {4,10,99,13}, {4,5,7,18},
-{4,5,10,14}, {4,10,99,13}, {4,5,9,18}, {4,6,99,99}, {0,1,2,17}, {4,5,9,18}, {4,5,6,99}, {0,2,99,16}, {0,1,3,18}, {4,5,9,14}, {4,10,99,13}, {4,5,9,18}, {4,6,99,99}, {0,1,2,12}, {4,5,9,16},
-{4,10,99,13}, {4,5,9,14}, {4,10,99,13}, {4,5,9,19}, {4,5,6,99}, {0,1,2,12}, {4,5,7,16}, {4,8,99,19}, {4,5,10,11}, {4,10,99,13}, {4,5,7,16}, {4,8,99,19}, {4,5,10,12}, {4,10,99,13}, {4,5,7,18},
-{4,5,10,19}, {4,5,6,99}, {0,1,3,11}, {4,5,7,12}, {4,8,99,16}, {4,8,99,19}, {5,10,11,99}, {4,10,99,13}, {4,5,7,11}, {4,8,11,99}, {4,8,12,99}, {4,8,99,16}, {4,8,99,18}, {4,5,10,14}, {4,10,99,13},
-{4,5,9,19}, {4,5,6,99}, {0,1,2,14}, {4,5,7,18}, {5,10,99,19}, {4,5,6,99}, {0,1,3,16}, {4,5,7,18}, {4,5,10,16}, {4,10,99,13}, {4,5,9,14}, {4,10,99,13}, {4,5,9,18}, {4,5,6,99}, {0,2,12,99},
-{0,1,3,14}, {4,5,7,17}, {4,5,10,17}, {4,6,99,99}, {0,3,99,18}, {0,3,99,19}, {0,2,11,99}, {0,1,2,12}, {4,5,7,16}, {4,8,99,18}, {4,5,10,16}, {4,10,99,13}, {4,5,9,16}, {4,10,99,13}, {4,5,9,16},
-{4,10,99,13}, {4,5,9,11}, {4,10,99,13}, {4,5,7,11}, {4,8,12,99}, {4,8,99,14}, {4,8,99,18}, {5,10,99,18}, {4,6,99,99}, {0,1,3,18}, {4,5,9,14}, {4,10,99,13}, {4,5,9,17}, {4,6,99,99}, {0,2,99,18},
-{0,3,99,14}, {0,1,2,18}, {4,5,9,19}, {4,5,6,99}, {0,1,2,11}, {4,5,7,11}, {4,8,11,99}, {4,8,11,99}, {4,8,11,99}, {4,8,12,99}, {4,8,99,14}, {4,8,99,17}, {4,5,10,17}, {4,6,99,99}, {0,3,99,18},
-{0,3,99,16}, {0,1,2,19}, {4,5,9,11}, {4,10,99,13}, {4,5,7,12}, {4,8,99,14}, {4,8,99,17}, {4,5,10,18}, {4,5,6,99}, {0,3,12,99}, {0,1,3,16}, {4,5,7,18}, {4,5,10,14}, {4,10,99,13}, {4,5,9,17},
-{4,6,99,99}, {0,2,99,17}, {0,3,99,17}, {0,2,99,18}, {0,2,99,18}, {0,2,99,14}, {0,1,2,17}, {4,5,9,18}, {4,5,6,99}, {0,2,11,99}, {0,1,3,12}, {4,5,7,14}, {4,8,99,17}, {4,5,10,18}, {4,5,6,99}, {98,99,99,99}};
+struct GAME
+{
+    int state;
+    int level[256][4];
+};
+
+GAME game;
 
 struct PLAYER 
 {
-    int state = 0;
-    int sprite = 48;
-    int alpha = 0;
-    int fade = 5;
-    bool flip = false;
-    int x = 0;
-    int y = 54;
-    int dx = 0;
+    int state;
+    int sprite;
+    int alpha;
+    int fade;
+    bool flip;
+    int x;
+    int y;
+    int dx;
     int timer;
-    int level = 0;
-    int start_x = 0;
-    bool hide = false;
-    int hide_x = 0;
+    int level;
+    int start_x;
+    bool hide;
+    int hide_x;
 };
 
 PLAYER p;
+int level_new[256][4]{
+    {0,3,99,14}, {0,1,3,18}, {4,5,9,18}, {4,6,99,99}, {0,1,2,19}, {4,5,9,11}, {4,10,99,13}, {4,5,7,14}, {4,8,99,17}, {4,5,10,17}, {4,6,99,99}, {0,3,99,17}, {0,3,99,18}, {0,2,99,19}, {0,2,12,99}, 
+    {0,2,99,14}, {4,5,7,18}, {4,5,10,18}, {4,6,99,99}, {0,3,99,18}, {4,5,9,18}, {4,6,99,99}, {0,1,2,18}, {4,5,9,19}, {4,5,6,99}, {0,1,2,16}, {4,5,7,19}, {4,5,10,11}, {4,10,99,13}, {4,5,7,14},
+    {4,8,99,18}, {4,5,10,18}, {4,6,99,99}, {0,1,3,17}, {4,5,9,17}, {4,6,99,99}, {0,2,99,18}, {0,3,99,18}, {0,2,99,16}, {0,1,2,18}, {4,5,9,16}, {4,10,99,13}, {4,5,9,12}, {4,10,99,13}, {4,5,7,19},
+    {4,5,10,12}, {4,10,99,13}, {4,5,7,18}, {4,5,10,16}, {4,10,99,13}, {4,5,9,12}, {4,10,99,13}, {4,5,7,18}, {4,5,10,18}, {4,6,99,99}, {0,1,2,19}, {4,5,9,12}, {4,10,99,13}, {5,7,99,17}, {4,5,10,17},
+    {4,6,99,99}, {0,3,99,19}, {0,3,11,99}, {0,1,2,11}, {4,5,7,11}, {4,8,12,99}, {4,8,99,16}, {8,99,99,19}, {4,5,10,12}, {4,10,99,13}, {4,5,7,19}, {4,5,10,11}, {4,10,99,13}, {4,5,7,12}, {4,8,99,16},
+    {4,8,99,18}, {4,5,10,16}, {4,10,99,13}, {4,5,9,11}, {4,10,99,13}, {4,5,7,16}, {4,8,99,18}, {4,5,10,14}, {4,10,99,13}, {4,5,9,18}, {4,5,6,99}, {0,2,99,14}, {0,3,99,17}, {4,5,9,17}, {4,6,99,99},
+    {0,2,99,19}, {0,3,12,99}, {0,1,2,16}, {4,5,7,19}, {4,5,10,12}, {4,10,99,13}, {4,5,7,17}, {4,5,10,18}, {4,5,6,99}, {0,3,11,99}, {0,1,3,11}, {4,5,7,12}, {4,8,99,14}, {4,8,99,18}, {4,5,10,19},
+    {4,5,6,99}, {0,1,3,12}, {4,5,7,14}, {8,99,99,18}, {4,5,10,19}, {4,5,6,99}, {0,1,3,14}, {4,5,7,17}, {4,5,10,18}, {4,5,6,99}, {0,3,99,16}, {0,1,3,19}, {4,5,9,12}, {4,10,99,13}, {4,5,7,18},
+    {4,5,10,14}, {4,10,99,13}, {4,5,9,18}, {4,6,99,99}, {0,1,2,17}, {4,5,9,18}, {4,5,6,99}, {0,2,99,16}, {0,1,3,18}, {4,5,9,14}, {4,10,99,13}, {4,5,9,18}, {4,6,99,99}, {0,1,2,12}, {4,5,9,16},
+    {4,10,99,13}, {4,5,9,14}, {4,10,99,13}, {4,5,9,19}, {4,5,6,99}, {0,1,2,12}, {4,5,7,16}, {4,8,99,19}, {4,5,10,11}, {4,10,99,13}, {4,5,7,16}, {4,8,99,19}, {4,5,10,12}, {4,10,99,13}, {4,5,7,18},
+    {4,5,10,19}, {4,5,6,99}, {0,1,3,11}, {4,5,7,12}, {4,8,99,16}, {4,8,99,19}, {5,10,11,99}, {4,10,99,13}, {4,5,7,11}, {4,8,11,99}, {4,8,12,99}, {4,8,99,16}, {4,8,99,18}, {4,5,10,14}, {4,10,99,13},
+    {4,5,9,19}, {4,5,6,99}, {0,1,2,14}, {4,5,7,18}, {5,10,99,19}, {4,5,6,99}, {0,1,3,16}, {4,5,7,18}, {4,5,10,16}, {4,10,99,13}, {4,5,9,14}, {4,10,99,13}, {4,5,9,18}, {4,5,6,99}, {0,2,12,99},
+    {0,1,3,14}, {4,5,7,17}, {4,5,10,17}, {4,6,99,99}, {0,3,99,18}, {0,3,99,19}, {0,2,11,99}, {0,1,2,12}, {4,5,7,16}, {4,8,99,18}, {4,5,10,16}, {4,10,99,13}, {4,5,9,16}, {4,10,99,13}, {4,5,9,16},
+    {4,10,99,13}, {4,5,9,11}, {4,10,99,13}, {4,5,7,11}, {4,8,12,99}, {4,8,99,14}, {4,8,99,18}, {5,10,99,18}, {4,6,99,99}, {0,1,3,18}, {4,5,9,14}, {4,10,99,13}, {4,5,9,17}, {4,6,99,99}, {0,2,99,18},
+    {0,3,99,14}, {0,1,2,18}, {4,5,9,19}, {4,5,6,99}, {0,1,2,11}, {4,5,7,11}, {4,8,11,99}, {4,8,11,99}, {4,8,11,99}, {4,8,12,99}, {4,8,99,14}, {4,8,99,17}, {4,5,10,17}, {4,6,99,99}, {0,3,99,18},
+    {0,3,99,16}, {0,1,2,19}, {4,5,9,11}, {4,10,99,13}, {4,5,7,12}, {4,8,99,14}, {4,8,99,17}, {4,5,10,18}, {4,5,6,99}, {0,3,12,99}, {0,1,3,16}, {4,5,7,18}, {4,5,10,14}, {4,10,99,13}, {4,5,9,17},
+    {4,6,99,99}, {0,2,99,17}, {0,3,99,17}, {0,2,99,18}, {0,2,99,18}, {0,2,99,14}, {0,1,2,17}, {4,5,9,18}, {4,5,6,99}, {0,2,11,99}, {0,1,3,12}, {4,5,7,14}, {4,8,99,17}, {4,5,10,18}, {4,5,6,99}, {98,99,99,99}};
+int level[256][4];
 
 struct SCORE
 {
-    int netto = 500;
-    int bonus = 0;
-    int coin = 0;
+    int netto;
+    int bonus;
+    int coin;
 };
 
 SCORE score;
 
-
-int jump[20]
-{-1, -1, -1, -1, 0, -1, 0, -1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 2, 2};
+int jump[20] {-1, -1, -1, -1, 0, -1, 0, -1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 2, 2};
+int jump_sound = 0;
 
 struct WATCH
 {
-    int s = 0;
-    int m = 30;
+    int s;
+    int m;
 };
 
 WATCH watch;
 
 struct INFO
 {
+    std::string txt1 = "";
+    std::string txt2 = ""; 
     int fader = 0;
     int d_fade = 3;
+    int counter = 0;
 };
 
 INFO info;
@@ -112,9 +122,14 @@ struct LIANA
     float angle = 90;
     float dangle = .8f;
     int state = 0;
+    int note = 0;
+    int timer;
 };
 
 LIANA liana;
+
+int liana_sound[6][2] 
+{{300,40},{500,30},{600,12},{500,12},{600,12},{500,30}};
 
 struct LAKE 
 {
@@ -145,6 +160,41 @@ ITEM snake;
 ITEM fire;
 ITEM gold;
 
+void start()
+{
+    for (int t=0;t<256;t++)
+    {
+        for (int i=0;i<4;i++)
+        {
+            level[t][i] = level_new[t][i];
+        }
+    }
+
+    p.state = 0;
+    p.sprite = 48;
+    p.alpha = 0;
+    p.fade = 5;
+    p.flip = false;
+    p.x = 0;
+    p.y = 54;
+    p.dx = 0;
+    p.level = 0;
+    p.start_x = 0;
+    p.hide = false;
+    p.hide_x = 0;
+
+    score.netto = 500;
+    score.bonus = 0;
+    score.coin = 0;
+    state = 2;
+
+    timber.counter = 0;
+
+    watch.s = 0;
+    watch.m = 30;// 30
+    seconds.start();
+}
+
 void seconds_update(blit::Timer &t)
 {
     watch.s--;
@@ -158,6 +208,7 @@ void seconds_update(blit::Timer &t)
             watch.m = 0;
             watch.s = 0;
             state = 2;
+            channels[4].trigger_attack();               
         }
     }
 }
@@ -226,6 +277,8 @@ void NewLevel(int dl)
     TimberReset();
     lake.s = 32;
     lake.ds = -1;
+
+    scorpion.x = 70 + (rand() % 70);
 }
 
 void RunAni()
@@ -239,6 +292,10 @@ void RunAni()
         if (p.sprite > 15)
         {
             p.sprite = 0;
+        }
+        if (p.sprite == 5 || p.sprite == 13)
+        {
+            channels[1].trigger_attack();
         }
     }   
 }
@@ -279,6 +336,9 @@ void PlayerControl()
         {
             p.state = 1;
             p.sprite = 16;
+            jump_sound = 300;
+            channels[0].decay_ms = 200;
+            channels[0].trigger_attack();
         }
     }
 
@@ -307,7 +367,10 @@ void PlayerControl()
                 p.state = 0;
                 p.timer = 0;
             }
-        }  
+
+        }
+        jump_sound += 10;
+        channels[0].frequency = jump_sound;  
     }
     else if (p.state == 2) //climb
     {
@@ -378,6 +441,7 @@ void PlayerControl()
             p.y++;
             if (p.y == 86)
             {
+                channels[2].trigger_attack();
                 score.bonus -= 100;
                 p.sprite = 48;
                 p.state = 6;
@@ -400,18 +464,9 @@ void PlayerControl()
     }
     else if (p.state == 9) // win
     {
-        p.timer++;
-        if (p.timer == 3)
-        {
-            p.timer = 0;
-            p.y += jump[p.sprite - 16];
-            p.sprite++;
-            if (p.sprite == 35)
-            {
-                p.sprite = 16;
-                p.flip = !p.flip;
-            }
-        }
+        jump_sound += 10;
+        channels[0].frequency = jump_sound;  
+
         int res_s = (watch.m * 60) + watch.s;
         if (res_s > 0)
         {
@@ -423,6 +478,33 @@ void PlayerControl()
             }
             score.bonus += 5;        
         }  
+
+        p.timer++;
+        if (p.timer == 3)
+        {
+            p.timer = 0;
+            p.y += jump[p.sprite - 16];
+            p.sprite++;
+            if (p.sprite == 35)
+            {
+                if (score.bonus > 0)
+                {
+                    p.sprite = 16;
+                    p.flip = !p.flip;
+                    jump_sound = 300;
+                    channels[0].decay_ms = 300;
+                    channels[0].trigger_attack();
+                }
+                else
+                {
+                    p.sprite = 48;
+                    p.timer = 0;
+                    info.txt1 = "GRATULATIONS!";
+                    info.txt2 = info.txt1;
+                    state = 3;          
+                }
+            }
+        }
     }
 }
 
@@ -500,8 +582,8 @@ void LadderRender()
 
 void HoleRender()
 {
-        screen.sprite(178, Point(40, 64)); // Loch links
-        screen.sprite(178, Point(112, 64), true); // Loch rechts
+    screen.sprite(178, Point(40, 64)); // Loch links
+    screen.sprite(178, Point(112, 64), true); // Loch rechts
 }
 
 void TimberUpdate(int number)
@@ -524,6 +606,7 @@ void TimberUpdate(int number)
                         timber.typ = level[p.level][3] - 1;
                     }
                     state = 2; // Died
+                    channels[4].trigger_attack();
                 }
                 else
                 {
@@ -627,7 +710,8 @@ void ScorpionUpdate()
     if (p.y > 82 && p.x < scorpion.x + 6 && p.x > scorpion.x - 6) // Collision
     {
         score.bonus -= 250;
-        state = 2; // Died   
+        state = 2; // Died 
+        channels[4].trigger_attack();  
     }
 }
 
@@ -649,9 +733,26 @@ void LianaUpdate()
         }
 
     }
+    if (liana.note > 0) {
+        channels[0].frequency = liana_sound[liana.note - 1][0];
+        liana.timer++;
+        if (liana.timer > liana_sound[liana.note - 1][1]) {
+            liana.timer = 0;
+            liana.note++;
+            if (liana.note > 6){
+                liana.note = 0;
+            }
+        } 
+    }
+
     if (p.state == 1 && p.x < (80 + cosf(liana.angle * pi / 180) * 40) && p.x > (73 + cosf(liana.angle * pi / 180) * 40) && p.y < (45 + abs(sinf(liana.angle * pi / 180) * 10)))
     {
         p.sprite = 36;
+        liana.note = 1;
+        liana.timer = 0;
+        channels[0].frequency = 200;
+        channels[0].decay_ms = 1800;
+        channels[0].trigger_attack();
         p.state = 3;
         if (liana.dangle > 0)
         {
@@ -674,6 +775,9 @@ void LianaUpdate()
             p.sprite = 26;
             p.y = 48;
             p.state = 4;
+            jump_sound = 300;
+            channels[0].decay_ms = 200;
+            channels[0].trigger_attack();
         }
     }
     else if (p.state == 4) // Absprung
@@ -691,7 +795,9 @@ void LianaUpdate()
                 p.state = 0;
                 p.timer = 0;
             }
-        }  
+        }
+        jump_sound += 10;
+        channels[0].frequency = jump_sound;  
     }
 }
 
@@ -731,7 +837,7 @@ void Lake2Update()
 
 void LakeRender(int y)
 {
-    screen.stretch_blit_sprite(Rect(56, y, 8, 8), Rect(80 - lake.s, 64, 2 * lake.s, 8));
+    screen.stretch_blit(screen.sprites,Rect(56, y, 8, 8), Rect(80 - lake.s, 64, 2 * lake.s, 8));
 }
 
 void CrocUpdate()
@@ -762,6 +868,7 @@ void CrocUpdate()
                 if ((p.x < 59 && p.x > 52) || (p.x < 77 && p.x > 70) || (p.x < 95 && p.x > 88)) 
                 {
                     state = 2;
+                    channels[4].trigger_attack();
                 }
                 else // sinking
                 {
@@ -776,7 +883,7 @@ void CrocUpdate()
 
 void CrocRender()
 {
-    screen.stretch_blit_sprite(Rect(56, 112, 8, 8), Rect(48, 64, 64, 8));
+    screen.stretch_blit(screen.sprites,Rect(56, 112, 8, 8), Rect(48, 64, 64, 8));
     for (int i = 57; i < 95; i += 18)
     {
         screen.sprite(croc.sprite, Point(i, 65));
@@ -802,6 +909,7 @@ void SnakeUpdate()
         {
             state = 2; // Died
             score.bonus -= 250;
+            channels[4].trigger_attack();
         }
     }
 }
@@ -833,7 +941,7 @@ void FireUpdate()
         {
             state = 2; // Died
             score.bonus -= 250;
-
+            channels[4].trigger_attack();
         }
     }
 }
@@ -861,12 +969,17 @@ void GoldUpdate()
         score.bonus += 500;
         level[p.level][3] = 99;
         score.coin++;
-        if (score.coin == 32)
+        channels[3].trigger_attack();
+        if (score.coin == 32) // 32
         {
             seconds.stop();
             p.sprite = 16;
             p.y = 54;
+            p.timer = 0;
             p.state = 9; // Win
+            jump_sound = 300;
+            channels[0].decay_ms = 300;
+            channels[0].trigger_attack();
         }
     }
 }
@@ -876,24 +989,37 @@ void GoldRender()
     screen.sprite(218 + gold.ani , Point(136, 63));
 }
 
-void ExpiredUpdate()
+void InfoUpdate()
 {
     info.fader += info.d_fade;
     if (info.fader < 1 || info.fader > 254)
     {
         info.d_fade = -info.d_fade;
-    } 
+        if (info.fader == 0)
+        {
+            if (info.txt1 == info.txt2)
+            {
+                info.txt1 = "PRESS A TO SKIP";
+            }
+            else
+            {
+                info.txt1 = info.txt2;
+            }
+        }
+    }
+    if (buttons.released & Button::A)
+    {
+        start(); // Neustart
+    }
 }
 
-void ExpiredRender()
+void InfoRender()
 {
     screen.alpha = info.fader;
-    std::string txt = "time expired!";
-    
     screen.pen = Pen(95, 87, 79);
-    screen.text(txt, minimal_font, Point(80,27), true, TextAlign::center_center);
+    screen.text(info.txt1, minimal_font, Point(80,56), true, TextAlign::center_center);
     screen.pen = Pen(255, 241, 232);
-    screen.text(txt, minimal_font, Point(79,27), true, TextAlign::center_center);
+    screen.text(info.txt1, minimal_font, Point(79,56), true, TextAlign::center_center);
     screen.alpha = 255;
 }
 
@@ -908,6 +1034,48 @@ void init()
     set_screen_mode(ScreenMode::lores);
 
     screen.sprites = Surface::load(asset_sprites);
+
+    // Jump, Swing Sound
+    channels[0].waveforms = Waveform::TRIANGLE; 
+    channels[0].frequency = 0;
+    channels[0].attack_ms = 5;
+    channels[0].decay_ms = 0;
+    channels[0].sustain = 0;
+    channels[0].release_ms = 5;
+
+    // Run Sound
+    channels[1].waveforms = Waveform::SQUARE;
+    channels[1].frequency = 200;
+    channels[1].attack_ms = 2;
+    channels[1].decay_ms = 5;
+    channels[1].sustain = 0;
+    channels[1].release_ms = 0;
+
+    // Fall Sound
+    channels[2].waveforms = Waveform::NOISE;
+    channels[2].frequency = 600;
+    channels[2].attack_ms = 5;
+    channels[2].decay_ms = 300;
+    channels[2].sustain = 0;
+    channels[2].release_ms = 50;
+
+    // Coin Sound
+    channels[3].waveforms = Waveform::TRIANGLE;
+    channels[3].frequency = 1800;
+    channels[3].attack_ms = 1;
+    channels[3].decay_ms = 250;
+    channels[3].sustain = 0;
+    channels[3].release_ms = 5;
+
+    // Kill, end of time Sound
+    channels[4].waveforms = Waveform::SQUARE;
+    channels[4].frequency = 100;
+    channels[4].attack_ms = 5;
+    channels[4].decay_ms = 400;
+    channels[4].sustain = 0;
+    channels[4].release_ms = 50;
+
+    start();
 
     seconds.init(seconds_update, 1000, -1);
     seconds.start();
@@ -935,10 +1103,10 @@ void render(uint32_t time)
     }
     else
     {
-        screen.stretch_blit_sprite(Rect(0, 104, 8, 13), Rect(0, 0, 160, 104)); // Hintergrund
+        screen.stretch_blit(screen.sprites,Rect(0, 104, 8, 13), Rect(0, 0, 160, 104)); // Hintergrund
         for (int i = 0; i < 160; i += 40)
         {
-            screen.stretch_blit_sprite(Rect(80, 112, 8, 8), Rect(16 + i, 42, 8, 22)); // Baumstamm
+            screen.stretch_blit(screen.sprites,Rect(80, 112, 8, 8), Rect(16 + i, 42, 8, 22)); // Baumstamm
             screen.sprite(233, Point(12 + i, 34));
             screen.sprite(233, Point(20 + i, 34), true);
         }
@@ -999,14 +1167,7 @@ void render(uint32_t time)
             }
         }
 
-        if (state == 3)
-        {
-            ExpiredRender();
-        }
-        else
-        {
-            PlayerRender();
-        }
+        PlayerRender();
 
         if (p.hide)
         {
@@ -1027,9 +1188,9 @@ void render(uint32_t time)
 
         for (int i = 0; i < 160; i += 40)
         {
-            screen.stretch_blit_sprite(Rect(64, 112, 8, 4), Rect(i, 32, 40, 4)); // Baum
-            screen.stretch_blit_sprite(Rect(0, 120, 8, 6), Rect(i, 72, 40, 6)); // Boden
-            screen.stretch_blit_sprite(Rect(0, 120, 8, 6), Rect(i, 104, 40, 6)); // Boden
+            screen.stretch_blit(screen.sprites,Rect(64, 112, 8, 4), Rect(i, 32, 40, 4)); // Baum
+            screen.stretch_blit(screen.sprites,Rect(0, 120, 8, 6), Rect(i, 72, 40, 6)); // Boden
+            screen.stretch_blit(screen.sprites,Rect(0, 120, 8, 6), Rect(i, 104, 40, 6)); // Boden
         }        
 
         screen.sprite(192, Point(126, 20));
@@ -1066,8 +1227,10 @@ void render(uint32_t time)
             }
         }
 
-//        screen.text("x: " + std::to_string(p.x), minimal_font, Point(10,5));
-//        screen.text("y: " + std::to_string(p.y), minimal_font, Point(10,13));
+        if (state == 3)
+        {
+            InfoRender();
+        }
     }
     screen.pen = Pen(0, 0, 0);
 }
@@ -1206,7 +1369,9 @@ void update(uint32_t time)
                 TimberReset();           
                 if (watch.m == 0 && watch.s == 0)
                 {
-                    state = 3;                
+                    info.txt1 = "time expired!";
+                    info.txt2 = info.txt1;
+                    state = 3;
                 }                
             }
             else if (p.alpha == 255) // fade out
@@ -1217,8 +1382,8 @@ void update(uint32_t time)
             }
         }
     }
-    else if (state == 3) // out of time
+    else if (state == 3) // Info state
     {
-        ExpiredUpdate();
-    }    
+        InfoUpdate();
+    }
 }
