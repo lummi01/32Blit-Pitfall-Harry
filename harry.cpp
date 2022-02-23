@@ -997,19 +997,11 @@ void InfoUpdate()
         info.d_fade = -info.d_fade;
         if (info.fader == 0)
         {
-            if (info.txt1 == info.txt2)
-            {
-                info.txt1 = "PRESS A TO SKIP";
-            }
-            else
-            {
-                info.txt1 = info.txt2;
-            }
+            info.txt1 == info.txt2? info.txt1 = "PRESS A TO SKIP": info.txt1 = info.txt2;
         }
     }
     if (buttons.released & Button::A)
     {
-        p.flip = true;
         state = 0;
     }
 }
@@ -1039,7 +1031,7 @@ void init()
     // Jump, Swing Sound
     channels[0].waveforms = Waveform::TRIANGLE; 
     channels[0].frequency = 0;
-    channels[0].attack_ms = 10;
+    channels[0].attack_ms = 5;
     channels[0].decay_ms = 0;
     channels[0].sustain = 0;
     channels[0].release_ms = 10;
@@ -1063,7 +1055,7 @@ void init()
     // Coin Sound
     channels[3].waveforms = Waveform::TRIANGLE;
     channels[3].frequency = 1800;
-    channels[3].attack_ms = 10;
+    channels[3].attack_ms = 5;
     channels[3].decay_ms = 250;
     channels[3].sustain = 0;
     channels[3].release_ms = 10;
@@ -1078,7 +1070,6 @@ void init()
 
     seconds.init(seconds_update, 1000, -1);
 
-    p.flip = true;
     state = 0;
 }
 
@@ -1266,8 +1257,9 @@ void update(uint32_t time)
         if (liana.angle <= 25 || liana.angle >= 155)
         {
             liana.dangle =- liana.dangle;
-            p.flip = !p.flip;
         }
+        liana.dangle > 0? p.flip = true: p.flip = false;
+        
         if (buttons.released & Button::A)
         {
             start();
