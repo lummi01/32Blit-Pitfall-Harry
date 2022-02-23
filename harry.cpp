@@ -186,7 +186,7 @@ void start()
     score.netto = 500;
     score.bonus = 0;
     score.coin = 0;
-    state = 2;
+    state = 1;
 
     timber.counter = 0;
 
@@ -337,7 +337,7 @@ void PlayerControl()
             p.state = 1;
             p.sprite = 16;
             jump_sound = 300;
-            channels[0].decay_ms = 200;
+            channels[0].decay_ms = 240;
             channels[0].trigger_attack();
         }
     }
@@ -499,7 +499,7 @@ void PlayerControl()
                 {
                     p.sprite = 48;
                     p.timer = 0;
-                    info.txt1 = "GRATULATIONS!";
+                    info.txt1 = "CONGRATULATION!";
                     info.txt2 = info.txt1;
                     state = 3;          
                 }
@@ -1009,7 +1009,8 @@ void InfoUpdate()
     }
     if (buttons.released & Button::A)
     {
-        start(); // Neustart
+        p.flip = true;
+        state = 0;
     }
 }
 
@@ -1038,34 +1039,34 @@ void init()
     // Jump, Swing Sound
     channels[0].waveforms = Waveform::TRIANGLE; 
     channels[0].frequency = 0;
-    channels[0].attack_ms = 5;
+    channels[0].attack_ms = 10;
     channels[0].decay_ms = 0;
     channels[0].sustain = 0;
-    channels[0].release_ms = 5;
+    channels[0].release_ms = 10;
 
     // Run Sound
     channels[1].waveforms = Waveform::SQUARE;
     channels[1].frequency = 200;
-    channels[1].attack_ms = 2;
-    channels[1].decay_ms = 5;
+    channels[1].attack_ms = 10;
+    channels[1].decay_ms = 30;
     channels[1].sustain = 0;
-    channels[1].release_ms = 0;
+    channels[1].release_ms = 10;
 
     // Fall Sound
     channels[2].waveforms = Waveform::NOISE;
     channels[2].frequency = 600;
     channels[2].attack_ms = 5;
-    channels[2].decay_ms = 300;
+    channels[2].decay_ms = 250;
     channels[2].sustain = 0;
-    channels[2].release_ms = 50;
+    channels[2].release_ms = 100;
 
     // Coin Sound
     channels[3].waveforms = Waveform::TRIANGLE;
     channels[3].frequency = 1800;
-    channels[3].attack_ms = 1;
+    channels[3].attack_ms = 10;
     channels[3].decay_ms = 250;
     channels[3].sustain = 0;
-    channels[3].release_ms = 5;
+    channels[3].release_ms = 10;
 
     // Kill, end of time Sound
     channels[4].waveforms = Waveform::SQUARE;
@@ -1075,10 +1076,10 @@ void init()
     channels[4].sustain = 0;
     channels[4].release_ms = 50;
 
-    start();
-
     seconds.init(seconds_update, 1000, -1);
-    seconds.start();
+
+    p.flip = true;
+    state = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -1098,8 +1099,23 @@ void render(uint32_t time)
 
     if (state == 0) 
     {
-        screen.text("Pitfall Harry", minimal_font, Point(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 1 / 3), true, TextAlign::center_center);
-        screen.text("Press A to Start", minimal_font, Point(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 2 / 3), true, TextAlign::center_center);
+        for (int i=0;i<120;i++)
+        {
+            screen.pen = Pen(250 - (i*2), 125 - i, 250 - (i*2));
+            screen.rectangle(Rect(0,i,160,2));
+        }
+        screen.pen = Pen(29, 43, 83);
+        screen.line(Point(81 + cosf(liana.angle * pi / 180) * 8, 20), Point(81 + cosf(liana.angle * pi / 180.0f) * 40, 71 + abs(sinf(liana.angle * pi / 180) * 10)));
+        screen.pen = Pen(224, 224, 224);
+        screen.line(Point(79 + cosf(liana.angle * pi / 180) * 8, 20), Point(79 + cosf(liana.angle * pi / 180.0f) * 40, 71 + abs(sinf(liana.angle * pi / 180) * 10)));
+        screen.line(Point(80 + cosf(liana.angle * pi / 180) * 8, 20), Point(80 + cosf(liana.angle * pi / 180.0f) * 40, 71 + abs(sinf(liana.angle * pi / 180) * 10)));
+        screen.sprite(Rect(14,14,2,2), Point(73 + cosf(liana.angle * pi / 180.0f) * 40, 65 + abs(sinf(liana.angle * pi / 180) * 10)), p.flip);
+        screen.sprite(Rect(12,14,2,2), Point(72 + cosf(liana.angle * pi / 180.0f) * 40, 64 + abs(sinf(liana.angle * pi / 180) * 10)), p.flip);
+        screen.sprite(Rect(0, 16, 13, 6), Point(31, 16));
+        screen.pen = Pen(128, 128, 128);
+        screen.text("PRESS X TO START", minimal_font, Point(80,104), true, TextAlign::center_center);
+        screen.pen = Pen(240, 240, 240);
+        screen.text("PRESS X TO START", minimal_font, Point(79,104), true, TextAlign::center_center);
     }
     else
     {
@@ -1246,6 +1262,17 @@ void update(uint32_t time)
 {
     if (state == 0)
     {
+        liana.angle+=liana.dangle;
+        if (liana.angle <= 25 || liana.angle >= 155)
+        {
+            liana.dangle =- liana.dangle;
+            p.flip = !p.flip;
+        }
+        if (buttons.released & Button::A)
+        {
+            start();
+            state = 2;
+        }
     }
     else if (state == 1)
     {
@@ -1339,6 +1366,10 @@ void update(uint32_t time)
                     p.y = 54;
                     p.state = 0;            
                 }
+                jump_sound = 300;
+                channels[0].decay_ms = 75;
+                channels[0].frequency = 650 - ((p.sprite - 36) * 50);
+                channels[0].trigger_attack();
             }
         }
         else // fadeing
